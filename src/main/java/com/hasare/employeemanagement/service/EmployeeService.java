@@ -3,26 +3,28 @@ package com.hasare.employeemanagement.service;
 import com.hasare.employeemanagement.domain.Employee;
 import com.hasare.employeemanagement.repository.EmployeeRepository;
 import com.hasare.employeemanagement.web.dto.EmployeeCreateDto;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
 
+@Service
 public class EmployeeService {
 
     private final EmployeeRepository employeeRepository;
 
-    public EmployeeService(EmployeeRepository employeeRepository){
+    public EmployeeService(EmployeeRepository employeeRepository) {
         this.employeeRepository = employeeRepository;
     }
 
-    public List<Employee> findAll (){
+    public List<Employee> findAll() {
         return employeeRepository.findAll();
     }
 
-    public Employee create (EmployeeCreateDto dto){
+    public Employee create(EmployeeCreateDto dto) {
         String email = dto.getEmail();
 
-        if (email != null && !email.isBlank() && employeeRepository.existsByEmail(email)){
+        if (email != null && !email.isBlank() && employeeRepository.existsByEmail(email)) {
             throw new IllegalArgumentException("Email already exists");
         }
 
@@ -31,12 +33,11 @@ public class EmployeeService {
         employee.setLastName(dto.getLastName());
         employee.setEmail(dto.getEmail().trim());
 
-        if( dto.getHiredAt() == null) {
+        if (dto.getHiredAt() == null) {
             employee.setHiredAt(LocalDate.now());
         } else {
             employee.setHiredAt(dto.getHiredAt());
         }
         return employeeRepository.save(employee);
-
     }
 }
