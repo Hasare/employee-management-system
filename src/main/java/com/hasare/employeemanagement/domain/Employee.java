@@ -33,9 +33,10 @@ public class Employee {
     @Column(nullable = false, length = 60)
     private String lastName;
 
+    @NotBlank
     @Email
     @Size(max = 120)
-    @Column(length = 120, unique = true)
+    @Column(nullable = false,length = 120, unique = true)
     private String email;
 
     private LocalDate hiredAt;
