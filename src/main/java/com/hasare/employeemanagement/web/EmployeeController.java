@@ -24,27 +24,27 @@ public class EmployeeController {
 
     @GetMapping
     public String list(Model model) {
-        model.addAttribute("employee", employeeService.findAll());
+        model.addAttribute("employees", employeeService.findAll());
         return "employees/list";
     }
 
     @GetMapping("/new")
     public String createForm(Model model) {
         model.addAttribute("employee", new EmployeeCreateDto());
-        return "employee/create";
+        return "employees/create";
     }
 
     @PostMapping
     public String create(@Valid @ModelAttribute("employee") EmployeeCreateDto employee, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return "employee/create";
+            return "employees/create";
         }
 
         try {
             employeeService.create(employee);
         } catch (IllegalArgumentException ex) {
             bindingResult.rejectValue("email", "duplicate", ex.getMessage());
-            return "employee/create";
+            return "employees/create";
         }
 
         return "redirect:/employees";
