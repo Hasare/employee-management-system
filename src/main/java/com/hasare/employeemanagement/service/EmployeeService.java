@@ -21,30 +21,27 @@ public class EmployeeService {
     public List<Employee> findAll() {
         return employeeRepository.findAll();
     }
+
     public Employee findById(Long id) {
         return employeeRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Employee not found"));
     }
 
     public Employee create(EmployeeCreateDto dto) {
-        String email = dto.getEmail();
+        String firstName = dto.getFirstName().trim();
+        String lastName = dto.getLastName().trim();
+        String email = dto.getEmail().trim().toLowerCase();
+        LocalDate hiredAt = dto.getHiredAt() != null ? dto.getHiredAt() : LocalDate.now();
 
-        if (email != null && !email.isBlank() && employeeRepository.existsByEmail(email)) {
+        if ( employeeRepository.existsByEmail(email) ) {
             throw new IllegalArgumentException("Email already exists");
         }
 
-        Employee employee = new Employee();
-        employee.setFirstName(dto.getFirstName());
-        employee.setLastName(dto.getLastName());
-        employee.setEmail(dto.getEmail().trim());
+        Employee employee = new Employee(firstName, lastName, email, hiredAt);
 
-        if (dto.getHiredAt() == null) {
-            employee.setHiredAt(LocalDate.now());
-        } else {
-            employee.setHiredAt(dto.getHiredAt());
-        }
         return employeeRepository.save(employee);
     }
+
     public EmployeeUpdateDto getEditDto(Long id) {
         Employee employee = findById(id);
 
@@ -57,6 +54,7 @@ public class EmployeeService {
 
         return dto;
     }
+
     public Employee update(Long id, EmployeeUpdateDto dto) {
         Employee employee = findById(id);
 
@@ -64,7 +62,7 @@ public class EmployeeService {
 
         boolean emailChanged = !java.util.Objects.equals(employee.getEmail(), email);
 
-        if (emailChanged && employeeRepository.existsByEmail(email)) {
+        if ( emailChanged && employeeRepository.existsByEmail(email) ) {
             throw new IllegalArgumentException("Email already exists");
         }
 
