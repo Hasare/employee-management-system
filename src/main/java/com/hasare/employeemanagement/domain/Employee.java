@@ -1,10 +1,6 @@
 package com.hasare.employeemanagement.domain;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -16,28 +12,28 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
 public class Employee {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank
-    @Size(max = 60)
     @Column(nullable = false, length = 60)
     private String firstName;
 
-    @NotBlank
-    @Size(max = 60)
     @Column(nullable = false, length = 60)
     private String lastName;
 
-    @NotBlank
-    @Email
-    @Size(max = 120)
-    @Column(nullable = false,length = 120, unique = true)
+    @Column(nullable = false, length = 120, unique = true)
     private String email;
 
     private LocalDate hiredAt;
+
+    public Employee(String firstName, String lastName, String email, LocalDate hiredAt) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.hiredAt = hiredAt;
+    }
+
 }
