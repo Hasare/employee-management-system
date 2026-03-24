@@ -3,15 +3,32 @@
 <head>
     <title>Employees</title>
     <meta charset="UTF-8"/>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        table, th, td {
+            border: 1px solid black;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+    </style>
 </head>
+
 <body>
+
 <h1>Employees</h1>
 
 <p>
     <a th:href="@{/employees/new}">Create Employee</a>
 </p>
 
-<table border="1" cellpadding="6">
+<table>
     <thead>
     <tr>
         <th>ID</th>
@@ -19,8 +36,10 @@
         <th>Last name</th>
         <th>Email</th>
         <th>Hired at</th>
+        <th>Actions</th>
     </tr>
     </thead>
+
     <tbody>
     <tr th:each="e : ${employees}">
         <td th:text="${e.id}"></td>
@@ -28,6 +47,10 @@
         <td th:text="${e.lastName}"></td>
         <td th:text="${e.email}"></td>
         <td th:text="${e.hiredAt}"></td>
+
+        <td>
+            <a th:href="@{/employees/{id}/edit(id=${e.id})}">Edit</a>
+        </td>
     </tr>
     </tbody>
 </table>

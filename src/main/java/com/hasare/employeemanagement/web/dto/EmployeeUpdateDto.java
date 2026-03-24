@@ -7,6 +7,7 @@ import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 
@@ -28,5 +29,6 @@ public class EmployeeUpdateDto {
     @Size(max = 120)
     private String email;
 
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate hiredAt;
 }
