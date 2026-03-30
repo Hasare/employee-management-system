@@ -73,4 +73,13 @@ public class EmployeeService {
 
         return employeeRepository.save(employee);
     }
+
+    public void deleteById(Long id) {
+        if (!employeeRepository.existsById(id)) {
+            throw new IllegalArgumentException("Employee not found");
+        }
+
+        employeeRepository.deleteById(id);
+    }
+
 }
