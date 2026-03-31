@@ -27,8 +27,6 @@ A web-based Employee Management System built with Spring Boot, Thymeleaf and Pos
 
 - Department management
 - Role management
-- Pagination
-- Improved UI styling
 
 ---
 
