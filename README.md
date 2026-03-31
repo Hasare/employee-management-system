@@ -2,12 +2,35 @@
 
 A web-based Employee Management System built with Spring Boot, Thymeleaf and PostgreSQL.
 
-# Project Status
+---
 
-This project is currently under active development.
+## Current Status
 
-Core structure and database integration are being implemented step by step.
-New features will be added incrementally.
+- Employee CRUD functionality is fully implemented
+- Focus on clean structure and maintainability
+- UI is intentionally simple (no JavaScript)
+
+---
+
+## Features
+
+- Create new employees
+- View a list of employees
+- Update existing employee data
+- Delete employees with confirmation
+- Server-side validation
+- Clean separation using DTOs
+
+---
+
+## Future Improvements
+
+- Department management
+- Role management
+- Pagination
+- Improved UI styling
+
+---
 
 ## Tech Stack
 
@@ -20,14 +43,28 @@ New features will be added incrementally.
 - Maven
 - Lombok
 
-## Features (Planned)
+---
 
-- Employee management
-- Department management
-- Role management
-- Form validation
-- Database integration
-- MVC architecture
+## Architecture
+
+The project follows a layered architecture:
+
+- Controller layer – handles HTTP requests and form binding
+- Service layer – contains business logic
+- Repository layer – handles database operations
+- DTO layer – separates web input from persistence models
+
+Flow:
+
+View (Thymeleaf)
+→ Controller
+→ DTO
+→ Service
+→ Entity
+→ Repository
+→ Database
+
+---
 
 ## Setup
 
