@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Delete Employee</title>
+    <meta charset="UTF-8"/>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        .actions {
+            margin-top: 20px;
+        }
+
+        .actions form,
+        .actions a {
+            display: inline-block;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Delete Employee</h1>
+
+<p>Are you sure you want to delete this employee?</p>
+
+<ul>
+    <li><strong>ID:</strong> <span th:text="${employee.id}"></span></li>
+    <li><strong>First name:</strong> <span th:text="${employee.firstName}"></span></li>
+    <li><strong>Last name:</strong> <span th:text="${employee.lastName}"></span></li>
+    <li><strong>Email:</strong> <span th:text="${employee.email}"></span></li>
+    <li><strong>Hired at:</strong> <span th:text="${employee.hiredAt}"></span></li>
+</ul>
+
+<div class="actions">
+    <form th:action="@{/employees/{id}/delete(id=${employee.id})}" method="post">
+        <button type="submit">Confirm Delete</button>
+    </form>
+
+    <a th:href="@{/employees}">Cancel</a>
+</div>
+
+</body>
+</html>

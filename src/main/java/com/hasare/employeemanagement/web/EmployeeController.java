@@ -77,4 +77,17 @@ public class EmployeeController {
 
         return "redirect:/employees";
     }
+
+    @GetMapping("/{id}/delete")
+    public String showDeleteConfirmation(@PathVariable Long id, Model model) {
+        model.addAttribute("employee", employeeService.findById(id));
+        return "employees/delete";
+    }
+
+    @PostMapping("/{id}/delete")
+    public String deleteEmployee(@PathVariable Long id) {
+        employeeService.deleteById(id);
+        return "redirect:/employees";
+    }
+
 }

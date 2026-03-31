@@ -17,6 +17,10 @@
             padding: 8px;
             text-align: left;
         }
+
+        .action-link {
+        margin-right: 10px;
+        }
     </style>
 </head>
 
@@ -49,7 +53,8 @@
         <td th:text="${e.hiredAt}"></td>
 
         <td>
-            <a th:href="@{/employees/{id}/edit(id=${e.id})}">Edit</a>
+            <a th:href="@{/employees/{id}/edit(id=${e.id})}" class="action-link">Edit</a>
+            <a th:href="@{/employees/{id}/delete(id=${e.id})}">Delete</a>
         </td>
     </tr>
     </tbody>
