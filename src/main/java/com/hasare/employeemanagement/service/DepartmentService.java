@@ -7,7 +7,6 @@ import com.hasare.employeemanagement.web.dto.DepartmentUpdateDto;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Objects;
 
 @Service
 public class DepartmentService {
@@ -30,7 +29,7 @@ public class DepartmentService {
     public Department create(DepartmentCreateDto departmentCreateDto) {
         String name = departmentCreateDto.getName().trim();
 
-        if (departmentRepository.existsByName(name)) {
+        if (departmentRepository.existsByNameIgnoreCase(name)) {
             throw new IllegalArgumentException("Department name already exists");
         }
 
@@ -53,9 +52,8 @@ public class DepartmentService {
 
         String name = departmentUpdateDto.getName().trim();
 
-        boolean nameChanged = !Objects.equals(department.getName(), name);
 
-        if (nameChanged && departmentRepository.existsByName(name)) {
+        if (departmentRepository.existsByNameIgnoreCaseAndIdNot(name, id)) {
             throw new IllegalArgumentException("Department name already exists");
         }
 

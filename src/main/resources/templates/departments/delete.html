@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Delete Department</title>
+    <meta charset="UTF-8"/>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        .actions {
+            margin-top: 20px;
+        }
+
+        .actions form,
+        .actions a {
+            display: inline-block;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Delete Department</h1>
+
+<p>Are you sure you want to delete this department?</p>
+
+<ul>
+    <li><strong>ID:</strong> <span th:text="${department.id}"></span></li>
+    <li><strong>Name:</strong> <span th:text="${department.name}"></span></li>
+</ul>
+
+<div class="actions">
+    <form th:action="@{/departments/{id}/delete(id=${department.id})}" method="post">
+        <button type="submit">Confirm Delete</button>
+    </form>
+
+    <a th:href="@{/departments}">Cancel</a>
+</div>
+
+</body>
+</html>
