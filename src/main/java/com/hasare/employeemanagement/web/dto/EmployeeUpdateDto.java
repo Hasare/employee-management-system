@@ -31,4 +31,6 @@ public class EmployeeUpdateDto {
 
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate hiredAt;
+
+    private Long departmentId;
 }
