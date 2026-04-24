@@ -20,12 +20,18 @@ public class DepartmentController {
         this.departmentService = departmentService;
     }
 
+    // =========================
+    // LIST
+    // =========================
     @GetMapping
     public String listDepartments(Model model) {
         model.addAttribute("departments", departmentService.findAll());
         return "departments/list";
     }
 
+    // =========================
+    // CREATE
+    // =========================
     @GetMapping("/new")
     public String showCreateDepartmentForm(Model model) {
         model.addAttribute("department", new DepartmentCreateDto());
@@ -51,6 +57,9 @@ public class DepartmentController {
         return "redirect:/departments";
     }
 
+    // =========================
+    // Update
+    // =========================
     @GetMapping("/{id}/edit")
     public String showDepartmentEditForm(@PathVariable Long id, Model model) {
         model.addAttribute("department", departmentService.getEditDto(id));
@@ -81,7 +90,9 @@ public class DepartmentController {
         return "redirect:/departments";
     }
 
-
+    // =========================
+    // DELETE
+    // =========================
     @GetMapping("/{id}/delete")
     public String showDepartmentDeleteConfirmation(@PathVariable Long id, Model model) {
         model.addAttribute("department", departmentService.findById(id));

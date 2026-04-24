@@ -1,6 +1,8 @@
 package com.hasare.employeemanagement.service;
 
+import com.hasare.employeemanagement.domain.Department;
 import com.hasare.employeemanagement.domain.Employee;
+import com.hasare.employeemanagement.repository.DepartmentRepository;
 import com.hasare.employeemanagement.repository.EmployeeRepository;
 import com.hasare.employeemanagement.web.dto.EmployeeCreateDto;
 import com.hasare.employeemanagement.web.dto.EmployeeUpdateDto;
@@ -13,9 +15,12 @@ import java.util.List;
 public class EmployeeService {
 
     private final EmployeeRepository employeeRepository;
+    private final DepartmentRepository departmentRepository;
 
-    public EmployeeService(EmployeeRepository employeeRepository) {
+
+    public EmployeeService(EmployeeRepository employeeRepository, DepartmentRepository departmentRepository) {
         this.employeeRepository = employeeRepository;
+        this.departmentRepository = departmentRepository;
     }
 
     public List<Employee> findAll() {
@@ -37,7 +42,9 @@ public class EmployeeService {
             throw new IllegalArgumentException("Email already exists");
         }
 
-        Employee employee = new Employee(firstName, lastName, email, hiredAt);
+        Department department = resolveDepartment(dto.getDepartmentID());
+
+        Employee employee = new Employee(firstName, lastName, email, hiredAt, department);
 
         return employeeRepository.save(employee);
     }
@@ -51,6 +58,7 @@ public class EmployeeService {
         dto.setLastName(employee.getLastName());
         dto.setEmail(employee.getEmail());
         dto.setHiredAt(employee.getHiredAt());
+        dto.setDepartmentId(employee.getDepartment() != null ? employee.getDepartment().getId() : null);
 
         return dto;
     }
@@ -66,20 +74,31 @@ public class EmployeeService {
             throw new IllegalArgumentException("Email already exists");
         }
 
+        Department department = resolveDepartment(dto.getDepartmentId());
+
         employee.setFirstName(dto.getFirstName().trim());
         employee.setLastName(dto.getLastName().trim());
         employee.setEmail(email);
         employee.setHiredAt(dto.getHiredAt());
+        employee.setDepartment(department);
 
         return employeeRepository.save(employee);
     }
 
     public void deleteById(Long id) {
-        if (!employeeRepository.existsById(id)) {
+        if ( !employeeRepository.existsById(id) ) {
             throw new IllegalArgumentException("Employee not found");
         }
 
         employeeRepository.deleteById(id);
     }
 
+    private Department resolveDepartment(Long departmentId) {
+
+        if ( departmentId == null ) {
+            return null;
+        }
+        return departmentRepository.findById(departmentId)
+                .orElseThrow(() -> new IllegalArgumentException("Department not found"));
+    }
 }

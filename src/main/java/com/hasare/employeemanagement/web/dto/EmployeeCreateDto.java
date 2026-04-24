@@ -31,4 +31,6 @@ public class EmployeeCreateDto {
 
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate hiredAt;
+
+    private Long departmentID;
 }

@@ -29,11 +29,16 @@ public class Employee {
 
     private LocalDate hiredAt;
 
-    public Employee(String firstName, String lastName, String email, LocalDate hiredAt) {
+    @ManyToOne(fetch = FetchType.LAZY, optional = true)
+    @JoinColumn(name = "department_id")
+    private Department department;
+
+    public Employee(String firstName, String lastName, String email, LocalDate hiredAt, Department department) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.hiredAt = hiredAt;
+        this.department= department;
     }
 
 }
