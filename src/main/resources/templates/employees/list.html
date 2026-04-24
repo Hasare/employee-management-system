@@ -41,6 +41,7 @@
         <th>Email</th>
         <th>Hired at</th>
         <th>Actions</th>
+        <th>Department</th>
     </tr>
     </thead>
 
@@ -51,7 +52,7 @@
         <td th:text="${e.lastName}"></td>
         <td th:text="${e.email}"></td>
         <td th:text="${e.hiredAt}"></td>
-
+        <td th:text="${employee.department != null ? employee.department.name : 'No Department'}"></td>
         <td>
             <a th:href="@{/employees/{id}/edit(id=${e.id})}" class="action-link">Edit</a>
             <a th:href="@{/employees/{id}/delete(id=${e.id})}">Delete</a>

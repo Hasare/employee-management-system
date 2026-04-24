@@ -31,7 +31,17 @@
         <input type="date" th:field="*{hiredAt}"/>
         <div th:if="${#fields.hasErrors('hiredAt')}" th:errors="*{hiredAt}"></div>
     </div>
+    <div>
+        <label for="departmentId">Department</label>
+        <select id="departmentId" th:field="*{departmentId}">
+            <option value="">No Department</option>
 
+            <option th:each="department : ${departments}"
+                    th:value="${department.id}"
+                    th:text="${department.name}">
+            </option>
+        </select>
+    </div>
     <p>
         <button type="submit">Save</button>
         <a th:href="@{/employees}">Cancel</a>
