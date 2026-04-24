@@ -42,7 +42,7 @@ public class EmployeeService {
             throw new IllegalArgumentException("Email already exists");
         }
 
-        Department department = resolveDepartment(dto.getDepartmentID());
+        Department department = resolveDepartment(dto.getDepartmentId());
 
         Employee employee = new Employee(firstName, lastName, email, hiredAt, department);
 
