@@ -6,6 +6,7 @@ import com.hasare.employeemanagement.repository.DepartmentRepository;
 import com.hasare.employeemanagement.repository.EmployeeRepository;
 import com.hasare.employeemanagement.web.dto.EmployeeCreateDto;
 import com.hasare.employeemanagement.web.dto.EmployeeUpdateDto;
+import com.hasare.employeemanagement.web.mapper.EmployeeMapper;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -16,11 +17,14 @@ public class EmployeeService {
 
     private final EmployeeRepository employeeRepository;
     private final DepartmentRepository departmentRepository;
+    private final EmployeeMapper employeeMapper;
 
-
-    public EmployeeService(EmployeeRepository employeeRepository, DepartmentRepository departmentRepository) {
+    public EmployeeService(EmployeeRepository employeeRepository,
+                           DepartmentRepository departmentRepository,
+                           EmployeeMapper employeeMapper) {
         this.employeeRepository = employeeRepository;
         this.departmentRepository = departmentRepository;
+        this.employeeMapper= employeeMapper;
     }
 
     public List<Employee> findAll() {
@@ -55,16 +59,7 @@ public class EmployeeService {
 
     public EmployeeUpdateDto getEditDto(Long id) {
         Employee employee = findById(id);
-
-        EmployeeUpdateDto dto = new EmployeeUpdateDto();
-
-        dto.setFirstName(employee.getFirstName());
-        dto.setLastName(employee.getLastName());
-        dto.setEmail(employee.getEmail());
-        dto.setHiredAt(employee.getHiredAt());
-        dto.setDepartmentId(employee.getDepartment() != null ? employee.getDepartment().getId() : null);
-
-        return dto;
+        return employeeMapper.toUpdateDto(employee);
     }
 
     public Employee update(Long id, EmployeeUpdateDto dto) {
