@@ -33,18 +33,22 @@ public class EmployeeService {
     }
 
     public Employee create(EmployeeCreateDto dto) {
-        String firstName = dto.getFirstName().trim();
-        String lastName = dto.getLastName().trim();
         String email = dto.getEmail().trim().toLowerCase();
-        LocalDate hiredAt = dto.getHiredAt() != null ? dto.getHiredAt() : LocalDate.now();
 
         if ( employeeRepository.existsByEmail(email) ) {
             throw new IllegalArgumentException("Email already exists");
         }
 
+        LocalDate hiredAt = dto.getHiredAt() != null ? dto.getHiredAt() : LocalDate.now();
+
         Department department = resolveDepartment(dto.getDepartmentId());
 
-        Employee employee = new Employee(firstName, lastName, email, hiredAt, department);
+        Employee employee = Employee.create(
+                dto.getFirstName(),
+                dto.getLastName(),
+                dto.getEmail(),
+                hiredAt,
+                department);
 
         return employeeRepository.save(employee);
     }
@@ -64,10 +68,10 @@ public class EmployeeService {
     }
 
     public Employee update(Long id, EmployeeUpdateDto dto) {
+
         Employee employee = findById(id);
 
         String email = dto.getEmail().trim().toLowerCase();
-
         boolean emailChanged = !java.util.Objects.equals(employee.getEmail(), email);
 
         if ( emailChanged && employeeRepository.existsByEmail(email) ) {
@@ -76,11 +80,13 @@ public class EmployeeService {
 
         Department department = resolveDepartment(dto.getDepartmentId());
 
-        employee.setFirstName(dto.getFirstName().trim());
-        employee.setLastName(dto.getLastName().trim());
-        employee.setEmail(email);
-        employee.setHiredAt(dto.getHiredAt());
-        employee.setDepartment(department);
+        employee.updatePersonalData(
+                dto.getFirstName(),
+                dto.getLastName(),
+                dto.getEmail()
+        );
+        employee.updateHiredAt(dto.getHiredAt());
+        employee.updateDepartment(department);
 
         return employeeRepository.save(employee);
     }
