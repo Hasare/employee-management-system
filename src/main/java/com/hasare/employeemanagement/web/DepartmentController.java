@@ -2,6 +2,7 @@ package com.hasare.employeemanagement.web;
 
 
 import com.hasare.employeemanagement.service.DepartmentService;
+import com.hasare.employeemanagement.service.exception.DuplicateDepartmentNameException;
 import com.hasare.employeemanagement.web.dto.DepartmentCreateDto;
 import com.hasare.employeemanagement.web.dto.DepartmentUpdateDto;
 import jakarta.validation.Valid;
@@ -49,7 +50,7 @@ public class DepartmentController {
 
         try {
             departmentService.create(dto);
-        } catch (IllegalArgumentException ex) {
+        } catch (DuplicateDepartmentNameException ex) {
             bindingResult.rejectValue("name", "duplicate", ex.getMessage());
             return "departments/create";
         }
@@ -81,7 +82,7 @@ public class DepartmentController {
 
         try {
             departmentService.update(id, dto);
-        } catch (IllegalArgumentException ex) {
+        } catch (DuplicateDepartmentNameException ex) {
             bindingResult.rejectValue("name", "duplicate", ex.getMessage());
             model.addAttribute("departmentId", id);
             return "departments/edit";

@@ -3,6 +3,8 @@ package com.hasare.employeemanagement.web;
 
 import com.hasare.employeemanagement.service.DepartmentService;
 import com.hasare.employeemanagement.service.EmployeeService;
+import com.hasare.employeemanagement.service.exception.DepartmentNotFoundException;
+import com.hasare.employeemanagement.service.exception.DuplicateEmployeeEmailException;
 import com.hasare.employeemanagement.web.dto.EmployeeCreateDto;
 import com.hasare.employeemanagement.web.dto.EmployeeUpdateDto;
 import jakarta.validation.Valid;
@@ -55,19 +57,16 @@ public class EmployeeController {
 
         try {
             employeeService.create(employee);
-        } catch (IllegalArgumentException ex) {
-
-            if ("Email already exists".equals(ex.getMessage())) {
-                bindingResult.rejectValue("email", "duplicate", ex.getMessage());
-            } else if ("Department not found".equals(ex.getMessage())) {
-                bindingResult.rejectValue("departmentId", "invalid", ex.getMessage());
-            } else {
-                bindingResult.reject("error", ex.getMessage());
-            }
-
+        } catch (DuplicateEmployeeEmailException ex) {
+            bindingResult.rejectValue("email", "duplicate", ex.getMessage());
+            addDepartmentOptions(model);
+            return "employees/create";
+        } catch (DepartmentNotFoundException ex) {
+            bindingResult.rejectValue("departmentId", "invalid", ex.getMessage());
             addDepartmentOptions(model);
             return "employees/create";
         }
+
 
         return "redirect:/employees";
     }
@@ -97,16 +96,13 @@ public class EmployeeController {
 
         try {
             employeeService.update(id, employeeUpdateDto);
-        } catch (IllegalArgumentException ex) {
-
-            if ("Email already exists".equals(ex.getMessage())) {
-                bindingResult.rejectValue("email", "duplicate", ex.getMessage());
-            } else if ("Department not found".equals(ex.getMessage())) {
-                bindingResult.rejectValue("departmentId", "invalid", ex.getMessage());
-            } else {
-                bindingResult.reject("error", ex.getMessage());
-            }
-
+        } catch (DuplicateEmployeeEmailException ex) {
+            bindingResult.rejectValue("email", "duplicate", ex.getMessage());
+            model.addAttribute("employeeId", id);
+            addDepartmentOptions(model);
+            return "employees/edit";
+        } catch (DepartmentNotFoundException ex) {
+            bindingResult.rejectValue("departmentId", "invalid", ex.getMessage());
             model.addAttribute("employeeId", id);
             addDepartmentOptions(model);
             return "employees/edit";
