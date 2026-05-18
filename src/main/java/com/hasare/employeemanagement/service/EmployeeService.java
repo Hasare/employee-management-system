@@ -4,6 +4,9 @@ import com.hasare.employeemanagement.domain.Department;
 import com.hasare.employeemanagement.domain.Employee;
 import com.hasare.employeemanagement.repository.DepartmentRepository;
 import com.hasare.employeemanagement.repository.EmployeeRepository;
+import com.hasare.employeemanagement.service.exception.DepartmentNotFoundException;
+import com.hasare.employeemanagement.service.exception.DuplicateEmployeeEmailException;
+import com.hasare.employeemanagement.service.exception.EmployeeNotFoundException;
 import com.hasare.employeemanagement.web.dto.EmployeeCreateDto;
 import com.hasare.employeemanagement.web.dto.EmployeeUpdateDto;
 import com.hasare.employeemanagement.web.mapper.EmployeeMapper;
@@ -33,14 +36,14 @@ public class EmployeeService {
 
     public Employee findById(Long id) {
         return employeeRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Employee not found"));
+                .orElseThrow(() -> new EmployeeNotFoundException(id));
     }
 
     public Employee create(EmployeeCreateDto dto) {
         String email = dto.getEmail().trim().toLowerCase();
 
         if ( employeeRepository.existsByEmail(email) ) {
-            throw new IllegalArgumentException("Email already exists");
+            throw new DuplicateEmployeeEmailException(email);
         }
 
         LocalDate hiredAt = dto.getHiredAt() != null ? dto.getHiredAt() : LocalDate.now();
@@ -70,7 +73,7 @@ public class EmployeeService {
         boolean emailChanged = !java.util.Objects.equals(employee.getEmail(), email);
 
         if ( emailChanged && employeeRepository.existsByEmail(email) ) {
-            throw new IllegalArgumentException("Email already exists");
+            throw new DuplicateEmployeeEmailException(email);
         }
 
         Department department = resolveDepartment(dto.getDepartmentId());
@@ -88,7 +91,7 @@ public class EmployeeService {
 
     public void deleteById(Long id) {
         if ( !employeeRepository.existsById(id) ) {
-            throw new IllegalArgumentException("Employee not found");
+            throw new EmployeeNotFoundException(id);
         }
 
         employeeRepository.deleteById(id);
@@ -100,6 +103,6 @@ public class EmployeeService {
             return null;
         }
         return departmentRepository.findById(departmentId)
-                .orElseThrow(() -> new IllegalArgumentException("Department not found"));
+                .orElseThrow(() -> new DepartmentNotFoundException(departmentId));
     }
 }

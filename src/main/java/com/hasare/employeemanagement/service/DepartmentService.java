@@ -2,6 +2,8 @@ package com.hasare.employeemanagement.service;
 
 import com.hasare.employeemanagement.domain.Department;
 import com.hasare.employeemanagement.repository.DepartmentRepository;
+import com.hasare.employeemanagement.service.exception.DepartmentNotFoundException;
+import com.hasare.employeemanagement.service.exception.DuplicateDepartmentNameException;
 import com.hasare.employeemanagement.web.dto.DepartmentCreateDto;
 import com.hasare.employeemanagement.web.dto.DepartmentUpdateDto;
 import org.springframework.stereotype.Service;
@@ -23,14 +25,14 @@ public class DepartmentService {
 
     public Department findById(Long id) {
         return departmentRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Department not found"));
+                .orElseThrow(() -> new DepartmentNotFoundException(id));
     }
 
     public Department create(DepartmentCreateDto departmentCreateDto) {
         String name = departmentCreateDto.getName().trim();
 
         if (departmentRepository.existsByNameIgnoreCase(name)) {
-            throw new IllegalArgumentException("Department name already exists");
+            throw  new DuplicateDepartmentNameException(name);
         }
 
         Department department = new Department(name);
@@ -54,7 +56,7 @@ public class DepartmentService {
 
 
         if (departmentRepository.existsByNameIgnoreCaseAndIdNot(name, id)) {
-            throw new IllegalArgumentException("Department name already exists");
+            throw new DuplicateDepartmentNameException(name);
         }
 
         department.setName(name);
@@ -64,7 +66,7 @@ public class DepartmentService {
 
     public void deleteById(Long id) {
         if (!departmentRepository.existsById(id)) {
-            throw new IllegalArgumentException("Department not found");
+            throw new DepartmentNotFoundException(id);
         }
 
         departmentRepository.deleteById(id);
