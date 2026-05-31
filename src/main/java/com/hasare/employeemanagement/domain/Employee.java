@@ -1,5 +1,6 @@
 package com.hasare.employeemanagement.domain;
 
+import com.hasare.employeemanagement.domain.exception.InvalidEmployeeException;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -38,6 +39,7 @@ public class Employee {
                      String email,
                      LocalDate hiredAt,
                      Department department) {
+
         String normalizedFirstName = normalizeRequiredText(firstName, "First name");
         String normalizedLastName = normalizeRequiredText(lastName, "Last name");
         String normalizedEmail = normalizeEmail(email);
@@ -59,6 +61,7 @@ public class Employee {
     }
 
     public void updatePersonalData(String firstName, String lastName, String email) {
+
         String normalizedFirstName = normalizeRequiredText(firstName, "First name");
         String normalizedLastName = normalizeRequiredText(lastName, "Last name");
         String normalizedEmail = normalizeEmail(email);
@@ -80,24 +83,28 @@ public class Employee {
 
     private static String normalizeRequiredText(String value, String fieldName) {
         if (value == null || value.trim().isEmpty()) {
-            throw new IllegalArgumentException(fieldName + " must not be null or empty");
+            throw new InvalidEmployeeException(fieldName + " must not be null or empty");
         }
 
         return value.trim();
     }
+
     private static final String EMAIL_REGEX = "^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$";
+
     private static String normalizeEmail(String value) {
+
         String normalized = normalizeRequiredText(value, "Email").toLowerCase();
 
         if (!normalized.matches(EMAIL_REGEX)) {
-            throw new IllegalArgumentException("Invalid email format");
+            throw new InvalidEmployeeException("Invalid email format");
         }
 
         return normalized;
     }
+
     private static LocalDate requireHiredAt(LocalDate hiredAt) {
         if (hiredAt == null) {
-            throw new IllegalArgumentException("Hired date must not be null");
+            throw new InvalidEmployeeException("Hired date must not be null");
         }
 
         return hiredAt;
