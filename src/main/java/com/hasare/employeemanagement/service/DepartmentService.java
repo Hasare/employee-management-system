@@ -54,7 +54,6 @@ public class DepartmentService {
 
         String name = departmentUpdateDto.getName().trim();
 
-
         if (departmentRepository.existsByNameIgnoreCaseAndIdNot(name, id)) {
             throw new DuplicateDepartmentNameException(name);
         }
