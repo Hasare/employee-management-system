@@ -29,22 +29,22 @@ public class DepartmentService {
     }
 
     public Department create(DepartmentCreateDto departmentCreateDto) {
-        String name = departmentCreateDto.getName().trim();
 
+        String name = departmentCreateDto.getName().trim();
         if (departmentRepository.existsByNameIgnoreCase(name)) {
             throw  new DuplicateDepartmentNameException(name);
         }
 
-        Department department = new Department(name);
+        Department department = Department.create(departmentCreateDto.getName());
 
         return departmentRepository.save(department);
     }
 
     public DepartmentUpdateDto getEditDto(Long id) {
-        Department department = findById(id);
 
+        Department department = findById(id);
         DepartmentUpdateDto departmentUpdateDto = new DepartmentUpdateDto();
-        departmentUpdateDto.setName(department.getName());
+        departmentUpdateDto.setName(department.getDepartmentName());
 
         return departmentUpdateDto;
     }
@@ -53,12 +53,11 @@ public class DepartmentService {
         Department department = findById(id);
 
         String name = departmentUpdateDto.getName().trim();
-
         if (departmentRepository.existsByNameIgnoreCaseAndIdNot(name, id)) {
             throw new DuplicateDepartmentNameException(name);
         }
 
-        department.setName(name);
+        department.updateDepartmentName(departmentUpdateDto.getName());
 
         return departmentRepository.save(department);
     }
