@@ -40,8 +40,8 @@ public class EmployeeService {
     }
 
     public Employee create(EmployeeCreateDto dto) {
-        String email = dto.getEmail().trim().toLowerCase();
 
+        String email = dto.getEmail().trim().toLowerCase();
         if ( employeeRepository.existsByEmail(email) ) {
             throw new DuplicateEmployeeEmailException(email);
         }
@@ -71,7 +71,6 @@ public class EmployeeService {
 
         String email = dto.getEmail().trim().toLowerCase();
         boolean emailChanged = !java.util.Objects.equals(employee.getEmail(), email);
-
         if ( emailChanged && employeeRepository.existsByEmail(email) ) {
             throw new DuplicateEmployeeEmailException(email);
         }
